@@ -15,7 +15,7 @@ The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), 
 ### Example
 The summary of paper [Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449):
 
-![](figs\example.png)
+![](./figs/example.png)
 
 
 ### Quickly Start
