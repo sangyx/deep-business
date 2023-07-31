@@ -180,13 +180,12 @@ def chat_paper_main():
 
     args = parser.parse_args()
 
-    jcode = "mksc"
-    path = "pdf/mksc.2022.1406.pdf"
-
     paper = Paper(
         args.pdf_path,
         args.jcode,
     )
+
+    print(paper)
 
     from config import openai_key, model
 
