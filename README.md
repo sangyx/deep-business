@@ -41,7 +41,7 @@ The summary of paper [Machine Learning vs. Economic Restrictions: Evidence from 
     ```
 
 ### Get connected
-If you encountered any problem / have some suggestions / want to contribute for this project, feel free to open an issue or send me an email.
+If you encountered any problem / have some suggestions / want to contribute for this project, feel free to [open an issue](https://github.com/sangyx/deep-business/issues/new/choose).
 
 WeChat Official Account (In Chinese):
 <html>
