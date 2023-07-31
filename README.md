@@ -1,6 +1,6 @@
 # deep-business
 
-**AI for Business is Now, and the Future.**
+> AI for Business is Now, and the Future.
 
 deep-business utilizes ChatGPT to summarize and chat with business papers, helping researchers stay up-to-date with the latest research trends. If you find this project useful, please give it a star!
 
