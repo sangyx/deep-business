@@ -2,12 +2,12 @@
 
 **AI for Business is Now, and the Future.**
 
-Hi, I'm [Yunxin Sang](https://sangyx.com/), a PhD candidate in McCombs School of Business, UT Austin. This project utilizes ChatGPT to summarize and chat with business papers, helping researchers stay up-to-date with the latest research trends. If you find this project useful, please give it a star!
+deep-business utilizes ChatGPT to summarize and chat with business papers, helping researchers stay up-to-date with the latest research trends. If you find this project useful, please give it a star!
 
 The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), and adds **parse templates for business papers**, which enables a more precise extraction of paper structure and content, as well as providing more insightful chat answers.
 
+### Support Journals
 **Note that you must use the official version of the paper downloaded from the journal's website to make the built-in parse templates take effect.** The supported journals and their jcode (abbreviation) are listed below:
-
 
 | jcode |            journal           |
 |:-----:|:----------------------------:|
