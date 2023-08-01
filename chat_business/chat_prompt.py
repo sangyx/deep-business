@@ -11,19 +11,22 @@ summary_prompt = {
     ],
     "prompt": dedent(
         """
-        This is the introduction of a paper wrapped in triple angle brackets: <<<{}>>>
+        This is the introduction of a paper wrapped in triple angle brackets: 
 
-        Now, I need your help to use the provided text to answer the following questions. If the answer cannot be found in the provided text, write "N/A."
+        <<<{}>>>
 
-        1. What problem does the paper attempt to solve? Is this a new problem?
-        2. What is a scientific hypothesis that the paper is trying to test?
-        3. What are the past methods? What are the problems with them? Is the approach well motivated?
-        4. What is the key to the solution proposed in the paper?
-        5. How were the experiments in the paper designed? What are the data sets? What are the metrics?
-        6. What are the findings in the paper? Is there good support for the scientific hypothesis that needs to be tested?
-        7. What are the next steps? What work can be furthered?
+        Now, I need your help to use the provided text to answer the following questions:
 
-        Statements as concise and academic as possible, do not have too much repetitive information, numerical values using the original numbers. When answering, please repeat the question followed by a new line to output the answer. If the answer cannot be found in the provided text, write "N/A."
+        1. Briefly summarize the paper's content in one sentence.
+        2. What problem does the paper attempt to solve? Is this a new problem?
+        3. What scientific hypothesis is the paper attempting to test?
+        4. What were the solutions used in the past, and what were the problems associated with them? Is the proposed solution well motivated?
+        5. What is the key to the proposed solution?
+        6. How were the experiments in the paper designed? What are the data sets used? What are the metrics used to evaluate the results?
+        7. What are the findings in the paper? Is there good support for the scientific hypothesis that needs to be tested?
+        8. What are the next steps? Is there any work that can be continued?
+
+        Statements as concise and academic as possible, do not have too much repetitive information, numerical values using the original numbers. When answering, you must repeat the question first, and then output the answer on a new line. If the question cannot be answered by the information provided in the text, please respond with "N/A".
         """
     ),
     "token": 1000,

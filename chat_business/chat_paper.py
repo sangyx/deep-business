@@ -59,7 +59,8 @@ class Reader:
         )
         text = self.find_text(keywords, paper.chapters, paper.chapter_text_dict)
 
-        print(f"\nsummarize the paper...\n")
+        print("-" * 100)
+        print("Summarize paper with [Introduction] and [Conclution]...\n")
 
         try:
             chat_text = self.chat(
@@ -91,7 +92,7 @@ class Reader:
 
         self.summary_text = chat_text
 
-        print("-" * 120)
+        print("-" * 100)
 
         if self.save:
             date_str = str(datetime.datetime.now())[:13].replace(" ", "-")
@@ -106,6 +107,9 @@ class Reader:
                 date_str + "-" + fname + "." + self.file_format,
             )
             self.export_to_markdown(chat_text, file_name=file_name, mode="w")
+
+    def user_chat(self):
+        input("")
 
     @tenacity.retry(
         wait=tenacity.wait_exponential(multiplier=1, min=4, max=10),
@@ -147,7 +151,7 @@ class Reader:
         print(result)
 
         print(
-            f"\nStatistics: total_token_used: {response.usage.total_tokens} | response_time: {response.response_ms / 1000.0}s"
+            f"\nTotal Token Used: {response.usage.total_tokens} | Response Time: {response.response_ms / 1000.0}s"
         )
 
         return result
@@ -177,6 +181,18 @@ def chat_paper_main():
         required=True,
         help="the path of input pdf",
     )
+    parser.add_argument(
+        "--openai_key",
+        type=str,
+        default=None,
+        help="OpenAI API Key",
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="16k",
+        help="The model to chat with",
+    )
 
     args = parser.parse_args()
 
@@ -187,7 +203,11 @@ def chat_paper_main():
 
     print(paper)
 
-    from config import openai_key, model
+    if args.openai_key:
+        openai_key = args.openai_key
+        model = args.model
+    else:
+        from config import openai_key, model
 
     reader = Reader(openai_key, model)
 

@@ -170,9 +170,9 @@ class Paper:
     def __str__(self) -> str:
         output = ""
         if self.title:
-            output += f"The chapters of paper [{self.title}]:\n"
+            output += f"\nThe chapters of paper [{self.title}]:\n"
         else:
-            output += f"The chapters of paper:\n"
+            output += f"\nThe chapters of paper:\n"
 
         for c in self.chapter_text_dict:
             if self.chapter_text_dict[c]["level"] == 1:
