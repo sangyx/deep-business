@@ -7,40 +7,24 @@ deep-business utilizes ChatGPT to summarize and chat with business papers, helpi
 The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), and adds **parse templates for business papers**, which enables a more precise extraction of paper structure and content, as well as providing more insightful chat answers.
 
 ### Support Journals
-**Note that you must use the official version of the paper downloaded from the journal's website to make the built-in parse templates take effect.** The supported journals and their jcode (abbreviation) are listed below:
+**Note that you must use the official version of the paper downloaded from the journal's website to make the built-in parse templates take effect.** The supported journals and their jcode (abbreviation)
 
-| jcode |            journal           |
-|:-----:|:----------------------------:|
-|  mnsc |      Management Science      |
-|  isre | Information Systems Research |
-|  mksc |       Marketing Science      |
-|  misq |         MIS Quarterly        |
-
-### Example
-The summary of paper [Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449):
-
-![](./figs/example.png)
+* `mnsc`: Management Science
+* `isre`: Information Systems Research
+* `misq`: MIS Quarterly
+* `ijoc`: INFORMS Journal on Computing
+* `mksc`: Marketing Science
+* `opre`: Operations Research
+* `msom`: Manufacturing & Service Operations Management
+* `orsc`: Organization Science
 
 
 ### Quickly Start
-* Create and activate a [conda](https://docs.conda.io/en/latest/miniconda.html) environment, use the following commands:
-    ```bash
-    conda env create -f deepb.yaml
-    conda activate deepb
-    ```
+The tutorial to summarize paper "[Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449)": 
 
-* Fill in the [`chat_business/config.py`](chat_business/config.py) with your own openai_key:
-    ```python
-    openai_key = "sk-xxxxxx"
-    model = "16k"
-    ```
+![](./figs/example.png)
 
-* Run [`chat_business/chat_paper.py`](chat_business\chat_paper.py) to parse your paper, eg. [Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449):
-    ```bash
-    python chat_paper.py --jcode mnsc --pdf_path mnsc.2022.4449.pdf
-    ```
-
-### Get connected
+### Get Connected
 If you encountered any problem / have some suggestions / want to contribute for this project, feel free to [open an issue](https://github.com/sangyx/deep-business/issues/new/choose).
 
 WeChat Official Account (In Chinese):

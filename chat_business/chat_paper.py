@@ -1,7 +1,6 @@
 import datetime
 import os
 import re
-import argparse
 
 import openai
 import tenacity
@@ -165,7 +164,22 @@ class Reader:
             f.write(text)
 
 
-def chat_paper_main():
+def chat_paper_main(pdf_path, jcode, openai_key, model):
+    paper = Paper(
+        pdf_path,
+        jcode,
+    )
+
+    print(paper)
+
+    reader = Reader(openai_key, model)
+
+    reader.summary_with_chat(paper=paper)
+
+
+def chat_paper_cli():
+    import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--jcode",
@@ -196,23 +210,14 @@ def chat_paper_main():
 
     args = parser.parse_args()
 
-    paper = Paper(
-        args.pdf_path,
-        args.jcode,
-    )
-
-    print(paper)
-
     if args.openai_key:
         openai_key = args.openai_key
         model = args.model
     else:
         from config import openai_key, model
 
-    reader = Reader(openai_key, model)
-
-    reader.summary_with_chat(paper=paper)
+    chat_paper_main(args.pdf_path, args.jcode, openai_key, model)
 
 
 if __name__ == "__main__":
-    chat_paper_main()
+    chat_paper_cli()

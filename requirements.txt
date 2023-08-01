@@ -1,0 +1,4 @@
+openai==0.27.8
+pymupdf==1.22.5
+tenacity==8.2.2
+tiktoken==0.4.0
