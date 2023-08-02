@@ -164,7 +164,7 @@ class Reader:
             f.write(text)
 
 
-def chat_paper_main(pdf_path, jcode, openai_key, model):
+def chat_paper(pdf_path, jcode, openai_key, model):
     paper = Paper(
         pdf_path,
         jcode,
@@ -216,7 +216,7 @@ def chat_paper_cli():
     else:
         from config import openai_key, model
 
-    chat_paper_main(args.pdf_path, args.jcode, openai_key, model)
+    chat_paper(args.pdf_path, args.jcode, openai_key, model)
 
 
 if __name__ == "__main__":

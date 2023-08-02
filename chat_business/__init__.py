@@ -1,1 +1,1 @@
-from chat_paper import chat_paper_main
+from chat_paper import chat_paper
