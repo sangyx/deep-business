@@ -161,7 +161,7 @@ cython_debug/
 
 crawler/
 data/
-src/
+woa/
 export/
 pdf/
 *.pdf

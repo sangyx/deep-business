@@ -23,7 +23,7 @@ The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), 
 
 ![](./figs/example.png)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/https://colab.research.google.com/github/sangyx/deep-business/blob/main/notebook/deep_business.ipynb) to summarize paper "[Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449)"
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sangyx/deep-business/blob/main/notebook/deep_business.ipynb) to summarize paper "[Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449)"
 
 ### Get Connected
 If you encountered any problem / have some suggestions / want to contribute for this project, feel free to [open an issue](https://github.com/sangyx/deep-business/issues/new/choose).
@@ -31,6 +31,6 @@ If you encountered any problem / have some suggestions / want to contribute for 
 WeChat Official Account (In Chinese):
 <html>
     <div align=center>
-        <img src="./figs/oa.png" width=300px />
+        <img src="./figs/oa.png" width=500px />
     </div>
 </html>

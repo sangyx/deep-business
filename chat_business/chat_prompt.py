@@ -26,7 +26,7 @@ summary_prompt = {
         7. What are the findings in the paper? Is there good support for the scientific hypothesis that needs to be tested?
         8. What are the next steps? Is there any work that can be continued?
 
-        Statements as concise and academic as possible, do not have too much repetitive information, numerical values using the original numbers. When answering, you must repeat the question first, and then output the answer on a new line. If the question cannot be answered by the information provided in the text, you must respond with "N/A".
+        Statements as concise and academic as possible, do not have too much repetitive information, numerical values using the original numbers. When answering, you must repeat the question first, and then output the answer on a new line. If the provided text does not contain the information needed to answer this question then simply write: "Insufficient information."
         """
     ),
     "token": 1000,
