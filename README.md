@@ -28,7 +28,8 @@ The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), 
 ### Get Connected
 If you encountered any problem / have some suggestions / want to contribute for this project, feel free to [open an issue](https://github.com/sangyx/deep-business/issues/new/choose).
 
-WeChat Official Account (In Chinese):
+* [Slack](https://join.slack.com/t/deep-business/shared_invite/zt-21uxqkwjr-~08a0tKvccGe4UdHQv5zXA)
+* WeChat Official Account (In Chinese):
 <html>
     <div align=center>
         <img src="./figs/oa.png" width=500px />
