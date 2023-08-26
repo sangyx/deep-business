@@ -12,9 +12,10 @@ from pdf_parser import Paper
 # 定义Reader类
 class Reader:
     # 初始化方法，设置属性
-    def __init__(self, openai_key, model, save=False):
+    def __init__(self, openai_key, model, paper, save=False):
         self.openai_key = openai_key
         self.save = save
+        self.paper = paper
 
         from chat_prompt import system_prompt, summary_prompt
 
@@ -34,7 +35,8 @@ class Reader:
 
         self.encoding = tiktoken.get_encoding("gpt2")
 
-    def find_text(self, keywords, chapters, chapter_text_dict):
+    def find_text(self, keywords):
+        chapters, chapter_text_dict = self.paper.chapters, self.paper.chapter_text_dict
         tc1 = []
 
         for k in keywords:
@@ -50,23 +52,18 @@ class Reader:
                 text += " " + chapter_text_dict[c2]["text"]
         return text.strip()
 
-    def summary_with_chat(self, paper):
+    def summary_with_chat(self):
         keywords, prompt, token = (
             self.summary_prompt["keywords"],
             self.summary_prompt["prompt"],
-            self.summary_prompt["token"],
         )
-        text = self.find_text(keywords, paper.chapters, paper.chapter_text_dict)
+        text = self.find_text(keywords)
 
         print("-" * 100)
         print("Summarize paper with [Introduction] and [Conclution]...\n")
 
         try:
-            chat_text = self.chat(
-                text=text,
-                prompt=prompt,
-                prompt_token=token,
-            )
+            chat_text = self.chat(text=text, prompt=prompt)
         except Exception as e:
             print("summary_error:", e)
             import sys
@@ -99,7 +96,7 @@ class Reader:
             if not os.path.exists(export_path):
                 os.makedirs(export_path)
 
-            fname = paper.path.split("/")[-1]
+            fname = self.paper.path.split("/")[-1]
             fname = fname.replace(".pdf", "")
             file_name = os.path.join(
                 export_path,
@@ -107,17 +104,65 @@ class Reader:
             )
             self.export_to_markdown(chat_text, file_name=file_name, mode="w")
 
+    def replace_text(self, prompt):
+        results = re.findall(r"<([\d|.]+?)>", prompt)
+
+        for n in results:
+            if n in self.paper.num2chapter:
+                sup_prompt = (
+                    f"\nIn the above question, <{n}> refers to the following text, which is a chapter in a paper:\n"
+                    + "{}"
+                )
+
+                c = self.paper.num2chapter[n]
+                print(f"\nThe answer is generating based on [{n} {c}]...\n")
+
+                if self.paper.chapter_text_dict[c]["level"] == 1:
+                    text = ""
+                    for c2 in self.paper.chapters[c]:
+                        text += " " + self.paper.chapter_text_dict[c2]["text"]
+                else:
+                    text = self.paper.chapter_text_dict[c]["text"]
+
+                return prompt + sup_prompt, text.strip()
+
+        print(
+            "\nCould not find {} in the paper.".format(
+                ", ".join([f"<{r}>" for r in results])
+            )
+        )
+        return None, None
+
     def user_chat(self):
-        input("")
+        q = input("Input your question (input 'quit' to quit) : ")
+        if q.startswith("quit"):
+            return True
+
+        try:
+            prompt, text = self.replace_text(q)
+            if not prompt:
+                print("-" * 100)
+                return
+
+            self.chat(
+                text=text,
+                prompt=prompt,
+            )
+        except Exception as e:
+            print("error:", e)
+
+        print("-" * 100)
+        return False
 
     @tenacity.retry(
         wait=tenacity.wait_exponential(multiplier=1, min=4, max=10),
         stop=tenacity.stop_after_attempt(5),
         reraise=True,
     )
-    def chat(self, text, prompt, prompt_token):
+    def chat(self, text, prompt):
         openai.api_key = self.openai_key
 
+        prompt_token = len(self.encoding.encode(prompt))
         text_token = len(self.encoding.encode(text))
 
         clip_text_index = int(
@@ -169,12 +214,18 @@ def chat_paper(pdf_path, jcode, openai_key, model):
         pdf_path,
         jcode,
     )
-
+    print("-" * 100)
     print(paper)
+    print("-" * 100)
 
-    reader = Reader(openai_key, model)
+    reader = Reader(openai_key, model, paper)
 
-    reader.summary_with_chat(paper=paper)
+    reader.summary_with_chat()
+
+    while True:
+        skip_flag = reader.user_chat()
+        if skip_flag:
+            break
 
 
 def chat_paper_cli():
@@ -185,6 +236,7 @@ def chat_paper_cli():
         "--jcode",
         type=str,
         required=True,
+        default="mnsc",
         choices=["mnsc", "isre", "ijoc", "mksc", "opre", "msom", "orsc", "misq"],
         help="""Journal, choose from the following -- mnsc: Management Science, isre: Information Systems Research, ijoc: INFORMS Journal on Computing, mksc: Marketing Science, opre: Operations Research, msom: Manufacturing & Service Operations Management, orsc: Organization Science, misq: MIS Quarterly
         """,

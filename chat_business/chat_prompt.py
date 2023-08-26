@@ -29,5 +29,4 @@ summary_prompt = {
         Statements as concise and academic as possible, do not have too much repetitive information, numerical values using the original numbers. When answering, you must repeat the question first, and then output the answer on a new line. If the provided text does not contain the information needed to answer this question then simply write: "Insufficient information."
         """
     ),
-    "token": 1000,
 }
