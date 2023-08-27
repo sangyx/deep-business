@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import sys
 
 import openai
 import tenacity
@@ -53,7 +54,7 @@ class Reader:
         return text.strip()
 
     def summary_with_chat(self):
-        keywords, prompt, token = (
+        keywords, prompt = (
             self.summary_prompt["keywords"],
             self.summary_prompt["prompt"],
         )
@@ -65,26 +66,7 @@ class Reader:
         try:
             chat_text = self.chat(text=text, prompt=prompt)
         except Exception as e:
-            print("summary_error:", e)
-            import sys
-
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            if "maximum context" in str(e):
-                current_tokens_index = (
-                    str(e).find("your messages resulted in")
-                    + len("your messages resulted in")
-                    + 1
-                )
-                offset = int(str(e)[current_tokens_index : current_tokens_index + 4])
-                summary_prompt_token = offset + token + 150
-                chat_text = self.chat(
-                    key_word="management science",
-                    text=text,
-                    prompt=prompt,
-                    summary_prompt_token=summary_prompt_token,
-                )
+            print("error:", e)
 
         self.summary_text = chat_text
 
@@ -166,7 +148,7 @@ class Reader:
         text_token = len(self.encoding.encode(text))
 
         clip_text_index = int(
-            len(text) * (self.max_token_num - prompt_token) / text_token
+            len(text) * (self.max_token_num - prompt_token - 200) / text_token
         )
 
         clip_text = text[:clip_text_index]
