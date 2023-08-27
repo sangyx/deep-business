@@ -11,7 +11,7 @@ class Paper:
     ):
         self.path = path  # pdf路径
 
-        from parse_template import (
+        from .parse_template import (
             get_filter_by_jcode,
             text_replace,
             exclude_chapter_name,

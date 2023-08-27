@@ -6,7 +6,7 @@ import openai
 import tenacity
 import tiktoken
 
-from pdf_parser import Paper
+from .pdf_parser import Paper
 
 
 # 定义Reader类
@@ -17,7 +17,7 @@ class Reader:
         self.save = save
         self.paper = paper
 
-        from chat_prompt import system_prompt, summary_prompt
+        from .chat_prompt import system_prompt, summary_prompt
 
         self.system_prompt = system_prompt
         self.summary_prompt = summary_prompt
