@@ -6,6 +6,11 @@ deep-business utilizes ChatGPT to summarize and chat with business papers, helpi
 
 The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), and adds **parse templates for business papers**, which enables a more precise extraction of paper structure and content, as well as providing more insightful chat answers.
 
+### Highlights
+* **PDF Parse Templates Designed for Business Journals**. We design specialized PDF parsing templates for top business journals. A more targeted answer is generated on a more accurate and clean chapter structure and corresponding text.
+* **Quick Summary**. Use the built-in prompt to summarize the paper. Get the main points in 5 minutes!
+* **Auto-Reference in User Chat**. Use `<chapter number>` in your questions to quickly reference the corresponding chapter content and get a more focused answer.
+
 ### Support Journals
 **Note that you must use the official version of the paper downloaded from the journal's website to make the built-in parse templates take effect.** The supported journals and their jcode (abbreviation)
 
@@ -21,7 +26,7 @@ The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), 
 
 ### Quickly Start
 
-![](./figs/example.png)
+![](./figs/example.svg)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sangyx/deep-business/blob/main/notebook/deep_business.ipynb) to summarize paper "[Machine Learning vs. Economic Restrictions: Evidence from Stock Return Predictability](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.2022.4449)"
 
