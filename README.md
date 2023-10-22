@@ -17,11 +17,11 @@ The project is built on [ChatPaper](https://github.com/kaixindelele/ChatPaper), 
 * `mnsc`: Management Science
 * `isre`: Information Systems Research
 * `misq`: MIS Quarterly
-* `ijoc`: INFORMS Journal on Computing
 * `mksc`: Marketing Science
 * `opre`: Operations Research
-* `msom`: Manufacturing & Service Operations Management
-* `orsc`: Organization Science
+* `jf`: Journal of Finance
+* `jfe`: Journal of Financial Economics
+* `rfs`: Review of Financial Studies
 
 
 ### Quickly Start

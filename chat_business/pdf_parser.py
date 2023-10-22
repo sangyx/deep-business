@@ -4,11 +4,7 @@ from collections import OrderedDict
 
 
 class Paper:
-    def __init__(
-        self,
-        path,
-        jcode,
-    ):
+    def __init__(self, path, jcode, title=None):
         self.path = path  # pdf路径
 
         from .parse_template import (
@@ -25,7 +21,10 @@ class Paper:
         self.text_replace = text_replace
         self.exclude_chapter_name = exclude_chapter_name
 
-        self.title = self.get_title()
+        if title:
+            self.title = title
+        else:
+            self.title = self.get_title()
 
         self.chapter_text_dict = self.parse_pdf()
         self.chapters = self.get_chapters()
@@ -99,7 +98,14 @@ class Paper:
         # if chapter_names:
         #     return chapter_names
 
+        initial_chapter_name = "Initial"
+
         prev_chapter_name = None
+        chapter_name = initial_chapter_name
+        chapter_level = 1
+        text = ""
+        skip_flag = False
+
         for i, page in enumerate(doc):
             if i < self.start_page:
                 continue
@@ -115,9 +121,9 @@ class Paper:
                 if skip_flag:
                     continue
 
-                chapter_name = ""
-                chapter_level = 1
-                text = ""
+                # chapter_name = ""
+                # chapter_level = 1
+                # text = ""
                 if "lines" in b:
                     for l in b["lines"]:
                         for s in l["spans"]:
@@ -129,9 +135,13 @@ class Paper:
                             for cf2 in self.filters["chapter2"]:
                                 if cf2(s):
                                     if chapter_name and chapter_level == 1:
+                                        # chapter_name = re.sub(
+                                        #     r"^[\d|.]+\s+", "", chapter_name.strip()
+                                        # )
                                         chapter_name = re.sub(
-                                            r"^[\d|.]+\s+", "", chapter_name.strip()
+                                            r"\s+", " ", chapter_name.strip()
                                         )
+
                                         prev_chapter_name = chapter_name
 
                                         chapter_text_dict[chapter_name] = {
@@ -139,6 +149,7 @@ class Paper:
                                             "text": text,
                                         }
                                         chapter_name = ""
+                                        text = ""
 
                                     chapter_name += " " + s["text"]
                                     chapter_level = 2
@@ -147,30 +158,66 @@ class Paper:
                                 if tf(s):
                                     text += " " + s["text"]
 
-                chapter_name = re.sub(r"^[\d|.]+\s+", "", chapter_name.strip())
-
-                skip_flag = False
                 for ec in self.exclude_chapter_name:
                     if ec in chapter_name.lower():
                         skip_flag = True
+                        break
 
                 if skip_flag:
-                    chapter_name = ""
-                    chapter_level = 1
-                    text = ""
-                    continue
+                    break
 
                 if chapter_name:
-                    chapter_text_dict[chapter_name] = {
-                        "level": chapter_level,
-                        "text": text,
-                    }
-                    prev_chapter_name = chapter_name
+                    if chapter_name == initial_chapter_name or (
+                        "chapter_format" in self.filters
+                        and not self.filters["chapter_format"](chapter_name)
+                    ):
+                        chapter_name = ""
+                        if prev_chapter_name:
+                            chapter_text_dict[prev_chapter_name]["text"] += text
+                            text = ""
+                        # chapter_level = 1
+                    else:
+                        # chapter_name = re.sub(r"^[\d|.]+\s+", "", chapter_name.strip())
+                        chapter_name = re.sub(r"\s+", " ", chapter_name.strip())
+                        if (
+                            prev_chapter_name
+                            and chapter_text_dict[prev_chapter_name]["level"]
+                            == chapter_level
+                            and not chapter_text_dict[prev_chapter_name]["text"]
+                        ):
+                            del chapter_text_dict[prev_chapter_name]
+                            prev_chapter_name = prev_chapter_name + " " + chapter_name
+                            chapter_text_dict[prev_chapter_name] = {
+                                "level": chapter_level,
+                                "text": text,
+                            }
+                            chapter_name = ""
+                            chapter_level = 1
+                            text = ""
+                        else:
+                            chapter_text_dict[chapter_name] = {
+                                "level": chapter_level,
+                                "text": text,
+                            }
+                            prev_chapter_name = chapter_name
+                            chapter_name = ""
+                            chapter_level = 1
+                            text = ""
                 elif prev_chapter_name:
                     chapter_text_dict[prev_chapter_name]["text"] += text
+                    text = ""
+
+            if skip_flag:
+                break
 
         for c in chapter_text_dict:
             chapter_text_dict[c]["text"] = self.clean_text(chapter_text_dict[c]["text"])
+
+        if (
+            initial_chapter_name in chapter_text_dict
+            and not chapter_text_dict[initial_chapter_name]["text"]
+        ):
+            del chapter_text_dict[initial_chapter_name]
 
         doc.close()
 
@@ -186,13 +233,7 @@ class Paper:
         for n in self.num2chapter:
             c = self.num2chapter[n]
             if self.chapter_text_dict[c]["level"] == 1:
-                output += f"{n} {c}\n"
+                output += f"<{n}> {c}\n"
             else:
-                output += f"  {n} {c}\n"
+                output += f"  <{n}> {c}\n"
         return output
-
-
-if __name__ == "__main__":
-    jcode = "mnsc"
-    paper = Paper("pdf/mnsc.1090.1033.pdf", jcode)
-    print(paper)

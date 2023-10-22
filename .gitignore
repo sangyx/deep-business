@@ -167,3 +167,4 @@ pdf/
 *.pdf
 test*
 .vscode/
+.history/
