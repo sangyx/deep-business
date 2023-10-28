@@ -21,6 +21,8 @@ class Paper:
         self.text_replace = text_replace
         self.exclude_chapter_name = exclude_chapter_name
 
+        self.initial_chapter_name = "Initial"
+
         if title:
             self.title = title
         else:
@@ -82,11 +84,16 @@ class Paper:
         return chapters
 
     def mark_chapter(self):
+        if self.initial_chapter_name in self.chapters:
+            i2k = lambda i: str(i)
+        else:
+            i2k = lambda i: str(i + 1)
+
         num2chapter = OrderedDict()
         for i, c in enumerate(self.chapters):
-            num2chapter[str(i + 1)] = c
+            num2chapter[i2k(i)] = c
             for j, sc in enumerate(self.chapters[c][1:]):
-                n = "{}.{}".format(i + 1, j + 1)
+                n = "{}.{}".format(i2k(i), j + 1)
                 num2chapter[n] = sc
         return num2chapter
 
@@ -98,10 +105,8 @@ class Paper:
         # if chapter_names:
         #     return chapter_names
 
-        initial_chapter_name = "Initial"
-
         prev_chapter_name = None
-        chapter_name = initial_chapter_name
+        chapter_name = self.initial_chapter_name
         chapter_level = 1
         text = ""
         skip_flag = False
@@ -129,6 +134,10 @@ class Paper:
                         for s in l["spans"]:
                             for cf in self.filters["chapter"]:
                                 if cf(s):
+                                    if chapter_name.startswith(
+                                        self.initial_chapter_name
+                                    ):
+                                        chapter_name = ""
                                     chapter_name += " " + s["text"]
                                     chapter_level = 1
 
@@ -166,11 +175,19 @@ class Paper:
                 if skip_flag:
                     break
 
-                if chapter_name:
-                    if chapter_name == initial_chapter_name or (
-                        "chapter_format" in self.filters
-                        and not self.filters["chapter_format"](chapter_name)
-                    ):
+                if chapter_name and text:
+                    if chapter_name == self.initial_chapter_name:
+                        chapter_text_dict[chapter_name] = {
+                            "level": chapter_level,
+                            "text": text,
+                        }
+                        prev_chapter_name = chapter_name
+                        chapter_name = ""
+                        chapter_level = 1
+                        text = ""
+                    elif "chapter_format" in self.filters and not self.filters[
+                        "chapter_format"
+                    ](chapter_name):
                         chapter_name = ""
                         if prev_chapter_name:
                             chapter_text_dict[prev_chapter_name]["text"] += text
@@ -214,10 +231,10 @@ class Paper:
             chapter_text_dict[c]["text"] = self.clean_text(chapter_text_dict[c]["text"])
 
         if (
-            initial_chapter_name in chapter_text_dict
-            and not chapter_text_dict[initial_chapter_name]["text"]
+            self.initial_chapter_name in chapter_text_dict
+            and not chapter_text_dict[self.initial_chapter_name]["text"]
         ):
-            del chapter_text_dict[initial_chapter_name]
+            del chapter_text_dict[self.initial_chapter_name]
 
         doc.close()
 
@@ -237,3 +254,9 @@ class Paper:
             else:
                 output += f"  <{n}> {c}\n"
         return output
+
+
+if __name__ == "__main__":
+    jcode = "mnsc"
+    paper = Paper("pdf/10.1287-mnsc.2023.4818.pdf", jcode)
+    print(paper)
